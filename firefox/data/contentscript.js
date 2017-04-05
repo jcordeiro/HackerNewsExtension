@@ -1,9 +1,9 @@
 
 var pagetop = document.getElementsByClassName('pagetop')[0];
-var newElement = ' | ' + 
-                 '<span id="insertedSpan">' +
-                 '<input id="newTabCheckbox" type="checkbox" />' +
-                 ' open links in new tab</span>';
+var newElement = ' | ' +
+	'<span id="insertedSpan">' +
+	'<input id="newTabCheckbox" type="checkbox" />' +
+	' open links in new tab</span>';
 
 // Insert the element into the page
 pagetop.insertAdjacentHTML('beforeend', newElement);
@@ -11,7 +11,7 @@ pagetop.insertAdjacentHTML('beforeend', newElement);
 var checkbox = document.getElementById('newTabCheckbox');
 
 // Set CSS styles for the new element
-checkbox.style.verticalAlign = 'middle';        
+checkbox.style.verticalAlign = 'middle';
 checkbox.style.padding = '0';
 checkbox.style.margin = '0';
 checkbox.style.lineHeight = '16px';
@@ -26,42 +26,29 @@ if (checkbox_status === "true") {
 	hnNewTabLinks();
 }
 
-checkbox.addEventListener('click', hnNewTabLinks, false);
+checkbox.addEventListener('change', hnNewTabLinks, false);
 
 // Loops through the links on the page and
 // set that target of all external links to "_blank"
 // causing them to open in a new tab when clicked
-function hnNewTabLinks() {
-	
+function hnNewTabLinks(e) {
 	var i, cb = document.getElementById('newTabCheckbox');
 
 	// Get all the links on the page
 	var links = document.getElementsByTagName("a");
 
-	if (cb.checked === true) {
+	// Set the status of the checkbox in localStorage
+	localStorage.setItem("checkbox_status", cb.checked);
 
-		// Set the status of the checkbox in localStorage
-		localStorage.setItem("checkbox_status", true);
+	// Iterate through all the links on the page and if checkbox is checked, modify target to "_blank"
+	for (i = 0; i < links.length; i++) {
+		// We only want to target article links
+		if (links[i].parentNode.className !== "title") continue;
 
-		// Loop through all the links on the page and set their target to "_blank"
-		// This will make them to open in a new tab when clicked by the user
-		for (i = 0; i < links.length; i++) {
-
-			// If the link is an article (conatined in a <td> with .title)
-			// Then set its target to "_blank" so it will open in a new tab
-			if (links[i].parentNode.className === "title") {
-				links[i].setAttribute("target", "_blank");
-			}
+		if (cb.checked) {
+			links[i].setAttribute("target", "_blank");
+		} else {
+			links[i].removeAttribute("target");
 		}
-	} else {
-
-			// Set the status of the checkbox in localStorage
-			localStorage.setItem("checkbox_status", false);
-
-			// Loop through all the links on the page make sure there target is empty
-			// This will make them to open in the same tab they were clicked from
-			for (i = 0; i < links.length; i++) {
-				links[i].removeAttribute("target");
-			}
-		}
+	}
 }

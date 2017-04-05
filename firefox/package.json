@@ -5,7 +5,7 @@
   "description": "Lets you open Hacker News' external links in a new tab",
   "author": "Jon Cordeiro",
   "license": "MPL 2.0",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "icon": "icon48.png",
   "icon64": "icon64.png"
 }
